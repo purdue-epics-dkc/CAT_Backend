@@ -2,7 +2,7 @@
 const express = require('express')
 const app = express()
 var cors = require('cors');
-const msg = "Hello from CAT's backend server!";
+const msg = "Hello from CAT's backend server";
 /*app.get('/', (req, res) => {
     res.sendFile(`${__dirname}/index.html`)
 })*/
