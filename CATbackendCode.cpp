@@ -45,11 +45,11 @@ namespace CATbackend {
 			fingerState indexFinger;
 			fingerState middleFinger;
 
-			int pointerFingerData = data_list.CloneElementAt(1)->Int32Value();
-			int pinkyFingerData = data_list.CloneElementAt(4)->Int32Value();
-			int thumbFingerData = data_list.CloneElementAt(0)->Int32Value();
-			int indexFingerData = data_list.CloneElementAt(3)->Int32Value();
-			int middleFingerData = data_list.CloneElementAt(2)->Int32Value();
+			int pointerFingerData = data_list->CloneElementAt(1)->Int32Value();
+			int pinkyFingerData = data_list->CloneElementAt(4)->Int32Value();
+			int thumbFingerData = data_list->CloneElementAt(0)->Int32Value();
+			int indexFingerData = data_list->CloneElementAt(3)->Int32Value();
+			int middleFingerData = data_list->CloneElementAt(2)->Int32Value();
 
 
 			//substitute question marks with values that are applicable with the data
