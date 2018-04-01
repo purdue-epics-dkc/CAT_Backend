@@ -1,5 +1,16 @@
 #include <node.h>
 
+//TODO Calibrate to real glove output values.
+#define POINTER_CURLED_HALF_CURLED_CUTOFF 0x555
+#define POINTER_HALF_CURLED_EXTENDED_CUTTOFF 0xaaa
+#define MIDDLE_CURLED_HALF_CURLED_CUTOFF 0x555
+#define MIDDLE_HALF_CURLED_EXTENDED_CUTTOFF 0xaaa
+#define INDEX_CURLED_HALF_CURLED_CUTOFF 0x555
+#define INDEX_HALF_CURLED_EXTENDED_CUTTOFF 0xaaa
+#define PINKY_CURLED_HALF_CURLED_CUTOFF 0x555
+#define PINKY_HALF_CURLED_EXTENDED_CUTTOFF 0xaaa
+#define THUMB_CURLED_HALF_CURLED_CUTOFF 0x555
+#define THUMB_HALF_CURLED_EXTENDED_CUTTOFF 0xaaa
 
 typedef enum state 
 {
@@ -55,12 +66,12 @@ namespace CATbackend {
 			//substitute question marks with values that are applicable with the data
 
 			//pointer finger
-			if (pointerFingerData >= ? && pointerFingerData <= 4095)
+			if (pointerFingerData < POINTER_CURLED_HALF_CURLED_CUTOFF)
 			{
 				pointerFinger = full_curled;
 			
 			}
-			else if (pointerFingerData >= ? && pointerFingerData <= ?)
+			else if (pointerFingerData < POINTER_HALF_CURLED_EXTEDED_CUTOFF)
 			{
 				pointerFinger = half_curled;
 			}
@@ -71,12 +82,12 @@ namespace CATbackend {
 
 
 			//pinky finger
-			if (pinkyFingerData >= ? && pinkyFingerData <= 4095)
+			if (pinkyFingerData < PINKY_CURLED_HALF_CURLED_CUTOFF)
 			{
 				pinkyFinger = full_curled;
 			
 			}
-			else if (pinkyFingerData >= ? && pinkyFingerData <= ?)
+			else if (pinkyFingerData < PINKY_HALF_CURLED_EXTEDED_CUTOFF)
 			{
 				pinkyFinger = half_curled;
 			}
@@ -87,12 +98,12 @@ namespace CATbackend {
 
 
 			//thumb finger
-			if (thumbFingerData >= ? && thumbFingerData <= 4095)
+			if (thumbFingerData < THUMB_CURLED_HALF_CURLED_CUTOFF)
 			{
 				pinkyFinger = full_curled;
 			
 			}
-			else if (thumbFingerData >= ? && thumbFingerData <= ?)
+			else if (thumbFingerData < THUMB_HALF_CURLED_EXTEDED_CUTOFF)
 			{
 				thumbFinger = half_curled;
 			}
@@ -103,12 +114,12 @@ namespace CATbackend {
 
 
 			//middle finger
-			if (middleFingerData >= ? && middleFingerData <= 4095)
+			if (middleFingerData < MIDDLE_CURLED_HALF_CURLED_CUTOFF)
 			{
 				middleFinger = full_curled;
 			
 			}
-			else if (middleFingerData >= ? && middleFingerData <= ?)
+			else if (middleFingerData < MIDDLE_HALF_CURLED_EXTEDED_CUTOFF)
 			{
 				middleFinger = half_curled;
 			}
@@ -119,12 +130,12 @@ namespace CATbackend {
 
 
 			//index finger
-			if (indexFingerData >= ? && indexFingerData <= 4095)
+			if (indexFingerData < INDEX_CURLED_HALF_CURLED_CUTOFF)
 			{
 				indexFinger = full_curled;
 			
 			}
-			else if (indexFingerData >= ? && indexFingerData <= ?)
+			else if (indexFingerData < INDEX_HALF_CURLED_EXTEDED_CUTOFF)
 			{
 				indexFinger = half_curled;
 			}
