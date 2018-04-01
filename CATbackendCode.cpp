@@ -39,8 +39,12 @@ typedef enum fingerState
 namespace CATbackend {   
 
 //void Method (oldState, count,  data)
-	void Method(const v8::Arguments& args) 
+	v8::Handle<v8::Value> Method(const v8::Arguments& args) 
 	{
+		// Handle return values and scope life.
+		v8::HandleScope scope;
+
+		// Track current sign.
 		state handState = INVALID;
 
 		v8::Handle<v8::Object> results = v8::Object::New();
@@ -214,13 +218,15 @@ namespace CATbackend {
 
 			if (results->Get(v8::String::NewSymbol("count"))->ToInteger()->IntegerValue() == 10 && handState != INVALID)
 			{
-				results->Set(v8::Handle<v8::Value>::Cast(v8::String::New("handState")), v8::Integer::New(handState));
-				args.GetReturnValue().Set(result);
+				//args.GetReturnValue().Set(result);
+				results->Set(v8::String::NewSymbol("result"), v8::Integer::New(int(handState)));
+				results->Set(v8::String::NewSymbol("oldState"), v8::Integer::New(int(handState)));
+				return scope.Close(results);
 			}
 
 			results->Set(v8::String::NewSymbol("oldState"), v8::Integer::New(int(handState)));
 
-			args.GetReturnValue().Set(result);
+			return scope.Close(results);
 
 
 		 }
