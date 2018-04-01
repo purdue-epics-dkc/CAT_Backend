@@ -39,7 +39,7 @@ typedef enum fingerState
 namespace CATbackend {   
 
 //void Method (oldState, count,  data)
-	v8::Handle<v8::Value> Method(const v8::Arguments& args) 
+	v8::Handle<v8::Value> Parse(const v8::Arguments& args) 
 	{
 		// Handle return values and scope life.
 		v8::HandleScope scope;
@@ -50,8 +50,8 @@ namespace CATbackend {
 		v8::Handle<v8::Object> results = v8::Object::New();
 		v8::Handle<v8::Array>  data_list = v8::Handle<v8::Array>::Cast(args[2]);
 
-		results->Set(v8::Handle<v8::Value>::Cast(v8::String::New("count")), args[1]);
-		results->Set(v8::Handle<v8::Value>::Cast(v8::String::New("oldState")), args[0]);
+		results->Set(v8::String::NewSymbol("count"), args[1]);
+		results->Set(v8::String::NewSymbol("oldState"), args[0]);
 
 		while (true)
 		 {
@@ -107,7 +107,7 @@ namespace CATbackend {
 			//thumb finger
 			if (thumbFingerData < THUMB_CURLED_HALF_CURLED_CUTOFF)
 			{
-				pinkyFinger = full_curled;
+				thumbFinger = full_curled;
 			
 			}
 			else if (thumbFingerData < THUMB_HALF_CURLED_EXTENDED_CUTOFF)
@@ -116,7 +116,7 @@ namespace CATbackend {
 			}
 			else
 			{
-				thumbFinger= extended;
+				thumbFinger = extended;
 			}
 
 
@@ -232,9 +232,9 @@ namespace CATbackend {
 		 }
 	}
 
-	void init(v8::Local<v8::Object> exports) 
+	void init(v8::Handle<v8::Object> exports) 
 	{
-		NODE_SET_METHOD(exports, , Method);
+		exports->Set(v8::String::New("Parse"), v8::FunctionTemplate::New(Parse)->GetFunction());
 	} 
 
 
