@@ -2,15 +2,15 @@
 
 //TODO Calibrate to real glove output values.
 #define POINTER_CURLED_HALF_CURLED_CUTOFF 0x555
-#define POINTER_HALF_CURLED_EXTENDED_CUTTOFF 0xaaa
+#define POINTER_HALF_CURLED_EXTENDED_CUTOFF 0xaaa
 #define MIDDLE_CURLED_HALF_CURLED_CUTOFF 0x555
-#define MIDDLE_HALF_CURLED_EXTENDED_CUTTOFF 0xaaa
+#define MIDDLE_HALF_CURLED_EXTENDED_CUTOFF 0xaaa
 #define INDEX_CURLED_HALF_CURLED_CUTOFF 0x555
-#define INDEX_HALF_CURLED_EXTENDED_CUTTOFF 0xaaa
+#define INDEX_HALF_CURLED_EXTENDED_CUTOFF 0xaaa
 #define PINKY_CURLED_HALF_CURLED_CUTOFF 0x555
-#define PINKY_HALF_CURLED_EXTENDED_CUTTOFF 0xaaa
+#define PINKY_HALF_CURLED_EXTENDED_CUTOFF 0xaaa
 #define THUMB_CURLED_HALF_CURLED_CUTOFF 0x555
-#define THUMB_HALF_CURLED_EXTENDED_CUTTOFF 0xaaa
+#define THUMB_HALF_CURLED_EXTENDED_CUTOFF 0xaaa
 
 typedef enum state 
 {
@@ -24,7 +24,8 @@ typedef enum state
   SEVEN,
   EIGHT,
   NINE,
-  PLUS //some operation ... to be confirmed
+  PLUS, //some operation ... to be confirmed
+  INVALID // Handle case outside current scope of signs.
 } state;
 
 typedef enum fingerState 
@@ -40,6 +41,8 @@ namespace CATbackend {
 //void Method (oldState, count,  data)
 	void Method(const v8::Arguments& args) 
 	{
+		state handState = INVALID;
+
 		v8::Handle<v8::Object> results = v8::Object::New();
 		v8::Handle<v8::Array>  data_list = v8::Handle<v8::Array>::Cast(args[2]);
 
@@ -71,7 +74,7 @@ namespace CATbackend {
 				pointerFinger = full_curled;
 			
 			}
-			else if (pointerFingerData < POINTER_HALF_CURLED_EXTEDED_CUTOFF)
+			else if (pointerFingerData < POINTER_HALF_CURLED_EXTENDED_CUTOFF)
 			{
 				pointerFinger = half_curled;
 			}
@@ -87,7 +90,7 @@ namespace CATbackend {
 				pinkyFinger = full_curled;
 			
 			}
-			else if (pinkyFingerData < PINKY_HALF_CURLED_EXTEDED_CUTOFF)
+			else if (pinkyFingerData < PINKY_HALF_CURLED_EXTENDED_CUTOFF)
 			{
 				pinkyFinger = half_curled;
 			}
@@ -103,7 +106,7 @@ namespace CATbackend {
 				pinkyFinger = full_curled;
 			
 			}
-			else if (thumbFingerData < THUMB_HALF_CURLED_EXTEDED_CUTOFF)
+			else if (thumbFingerData < THUMB_HALF_CURLED_EXTENDED_CUTOFF)
 			{
 				thumbFinger = half_curled;
 			}
@@ -119,7 +122,7 @@ namespace CATbackend {
 				middleFinger = full_curled;
 			
 			}
-			else if (middleFingerData < MIDDLE_HALF_CURLED_EXTEDED_CUTOFF)
+			else if (middleFingerData < MIDDLE_HALF_CURLED_EXTENDED_CUTOFF)
 			{
 				middleFinger = half_curled;
 			}
@@ -135,7 +138,7 @@ namespace CATbackend {
 				indexFinger = full_curled;
 			
 			}
-			else if (indexFingerData < INDEX_HALF_CURLED_EXTEDED_CUTOFF)
+			else if (indexFingerData < INDEX_HALF_CURLED_EXTENDED_CUTOFF)
 			{
 				indexFinger = half_curled;
 			}
@@ -148,74 +151,74 @@ namespace CATbackend {
 
 			if (pointerFinger == half_curled && pinkyFinger == half_curled && indexFinger == half_curled && thumbFinger == half_curled && middleFinger == half_curled)
 			{
-				returnValues.handState = ZERO;
+				handState = ZERO;
 			}
 
 			if (pointerFinger == extended && pinkyFinger == full_curled && indexFinger == full_curled && thumbFinger == full_curled && middleFinger == full_curled)
 			{
-				returnValues.handState = ONE;	
+				handState = ONE;
 			}
 
 			if (pointerFinger == extended && pinkyFinger == full_curled && indexFinger == full_curled && thumbFinger == full_curled && middleFinger == extended)
 			{
-				returnValues.handState = TWO;	
+				handState = TWO;
 			}
 
 			if (pointerFinger == extended && pinkyFinger == full_curled && indexFinger == full_curled && thumbFinger == extended && middleFinger == extended)
 			{
-				returnValues.handState = THREE;
+				handState = THREE;
 			}
 
 			if (pointerFinger == extended && pinkyFinger == extended && indexFinger == extended && thumbFinger == full_curled && middleFinger == extended)
 			{
-				returnValues.handState = FOUR;
+				handState = FOUR;
 			}
 
 			if (pointerFinger == extended && pinkyFinger == extended && indexFinger == extended && thumbFinger == extended && middleFinger == extended)
 			{
-				returnValues.handState = FIVE;
+				handState = FIVE;
 			}
 
 			if (pointerFinger == extended && pinkyFinger == full_curled && indexFinger == extended && thumbFinger == full_curled && middleFinger == extended)
 			{
-				returnValues.handState = SIX;
+				handState = SIX;
 			}
 
 			if (pointerFinger == extended && pinkyFinger == extended && indexFinger == full_curled && thumbFinger == full_curled && middleFinger == extended)
 			{
-				returnValues.handState = SEVEN;
+				handState = SEVEN;
 			}
 
 			if (pointerFinger == extended && pinkyFinger == extended && indexFinger == extended && thumbFinger == full_curled && middleFinger == full_curled)
 			{
-				returnValues.handState = EIGHT;
+				handState = EIGHT;
 			}
 
 			if (pointerFinger == full_curled && pinkyFinger == extended && indexFinger == extended && thumbFinger == full_curled && middleFinger == extended)
 			{
-				returnValues.handState = NINE;
+				handState = NINE;
 			}
 
 
-			if (returnValues.handState == result ->Get(v8::String::NewSymbol("oldState")))
+			if (int(handState) == results ->Get(v8::String::NewSymbol("oldState"))->Int32Value())
 			{
-				//returnValues.count++;
-				results->Set(v8::String::NewSymbol("count"), result->Get(v8::String::NewSymbol("count") + 1));
+				results->Set(v8::String::NewSymbol("count"), v8::Integer::New(results->Get(v8::String::NewSymbol("count"))->Int32Value() + 1));
 
 			}
 
 			else
 			{
-				results->Set(v8::String::NewSymbol("count"), 0);
+				results->Set(v8::String::NewSymbol("count"), v8::Integer::New(0));
 
 			}
 
-			if (result->Get("count") == 10)
+			if (results->Get(v8::String::NewSymbol("count"))->ToInteger()->IntegerValue() == 10 && handState != INVALID)
 			{
+				results->Set(v8::Handle<v8::Value>::Cast(v8::String::New("handState")), v8::Integer::New(handState));
 				args.GetReturnValue().Set(result);
 			}
 
-			results->Set(v8::String::NewSymbol("oldState"), handState);
+			results->Set(v8::String::NewSymbol("oldState"), v8::Integer::New(int(handState)));
 
 			args.GetReturnValue().Set(result);
 
@@ -231,14 +234,3 @@ namespace CATbackend {
 
 	NODE_MODULE(NODE_GYP_MODULE_NAME, init)
 }
-
-
-
-
-
-
-
-
-
-
-
