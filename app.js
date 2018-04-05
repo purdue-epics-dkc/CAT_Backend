@@ -1,26 +1,20 @@
-'use strict'
-const express = require('express')
-const app = express()
-var cors = require('cors');
-const msg = "Hello from CAT's backend server";
-/*app.get('/', (req, res) => {
-    res.sendFile(`${__dirname}/index.html`)
-})*/
+// Logic for standin backend.
+const standin = require('./build/Release/standin');
 
-app.use(cors());
+// For now call it each time a new frame is pushed to the queue.
+// It may be more efficient to wait for a chunk of frames before starting.
+module.exports = function(context, dataTrigger, oldState, count) {
+  var standinInput = {oldState: oldState, count: count, data: dataTrigger};
+  var standinOutput = standin.Parse(standinInput)
 
-app.get('/', (request, response) => {
-  response.json({
-    greeting: msg
-  })
-})
+  // Preserve state information for next call.
+  context.output.count = standinOutput.count;
+  context.output.oldState = standinOutput.oldState;
 
-app.get('/cat', (request, response) => {
-  response.json({
-    greeting: "meow"
-  })
-})
+  // Check if a sign has been returned.
+  if (standinOutput.hasOwnProperty('result')) {
+    context.done(null, standinOutput.result);
+  }
 
-//app.listen(3000) // <-- uncomment for local testing
-
-module.exports = app // export your app so aws-serverless-express can use it
+  context.done(null, null);
+};
