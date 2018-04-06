@@ -1,0 +1,37 @@
+{
+  "bindings": [
+    {
+      // Queue of glosses output by standin backend.
+      "type": "queue",
+      "direction": "out",
+      "name": "$return",
+      "queueName": "glossOut",
+      //"connection": "???",
+    },
+    {
+      // State of last handstate seen by machine.
+      "name": "oldState",
+      "type": "mobileTable",
+      "tableName": "state",
+      //"connection": "???",
+      "id": "oldState",
+      "direction": "inout",
+    },
+    {
+      "name": "count",
+      "type": "mobileTable",
+      "tableName": "state",
+      //"connection": "???",
+      "id": "count",
+      "direction": "inout",
+    },
+    {
+      "name": "data",
+      "type": "queueTrigger",
+      "queueName": "dataFrames",
+      //"connection": "???",
+      "direction": "inout",
+    }
+  ],
+  "disabled": false
+}
